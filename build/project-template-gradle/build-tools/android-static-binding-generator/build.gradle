@@ -8,6 +8,7 @@ def astParserDir = "$projectDir/ast-parser"
 def interfaceNamesFilePath = "$projectDir/interfaces-names.txt"
 def bindingsFilePath = "$projectDir/bindings.txt"
 def cachedJarsFilePath = "$projectDir/cached.txt"
+def timeStampFilePath = "$projectDir/timestamp.txt"
 
 def shouldRun = true
 def absoluteOutDir = project.outDir
@@ -49,7 +50,7 @@ task runAstParser () {
 	inputs.files fileTree(dir: absoluteJsCodeDir)
 	outputs.files(bindingsFilePath)
 
-	doFirst {
+	doFirst {		
 		exec {
 			workingDir astParserDir
 
@@ -79,6 +80,7 @@ task generateBindings() {
 			str.add("staticbindinggenerator.jar")
 			str.add(bindingsFilePath)
 			str.add(absoluteOutDir)
+			str.add(timeStampFilePath)
 			str.addAll(project.jarFiles)
 
 			args str.toArray()
@@ -88,4 +90,3 @@ task generateBindings() {
 
 runAstParser.dependsOn(generateInterfaceNamesList)
 generateBindings.dependsOn(runAstParser)
-
